@@ -108,7 +108,7 @@ public extension UIViewController {
             return encodedData.map { try! JSONDecoder().decode(ScreenSetting.self, from: $0) }
         }
         
-        private func controllerName() -> String {
+        private func getControllerName() -> String {
             let topVC = UIApplication.getTopViewController()
             let className = NSStringFromClass(topVC!.classForCoder).toString()
             let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String
@@ -129,7 +129,7 @@ public extension UIViewController {
                 return
             }
             
-            let controllerName = controllerName()
+            let controllerName = getControllerName()
             if configScreens[0].controllerName.toString() != controllerName {
                 self.timer?.invalidate()
                 return
