@@ -12,25 +12,40 @@ let ScreenSettingUserDefaults = "m_screen_setting"
 extension MobioSDK {
     
     public func screenSetting(title: String, controllerName: String, timeVisit: Array<Int>) {
-        addConfigScreen([ScreenSetting(title: title, controllerName: controllerName, timeVisit: timeVisit)])
+        addConfigScreen(ScreenSetting(title: title, controllerName: controllerName, timeVisit: timeVisit))
     }
     
-    public func addConfigScreen(_ screens: [ScreenSetting]) {
-        let data = screens.map { try? JSONEncoder().encode($0) }
+    private func addConfigScreen(_ screens: ScreenSetting) {
+        var configScreen = getConfigScreen()
+        if configScreen.count == 0 {
+            configScreen.append(ScreenSetting(title: screens.title, controllerName: screens.controllerName, timeVisit: screens.timeVisit))
+        } else {
+                for item in configScreen {
+                    if (screens.controllerName == item.controllerName) {
+                        return
+                    }
+                }
+            configScreen.append(ScreenSetting(title: screens.title, controllerName: screens.controllerName, timeVisit: screens.timeVisit))
+        }
+        let data = configScreen.map { try? JSONEncoder().encode($0) }
+
         UserDefaults.standard.set(data, forKey: ScreenSettingUserDefaults)
+        UserDefaults.standard.synchronize()
     }
     
-    public func getConfigScreen() -> [ScreenSetting] {
+    private func getConfigScreen() -> [ScreenSetting] {
         guard let encodedData = UserDefaults.standard.array(forKey: ScreenSettingUserDefaults) as? [Data] else {
             return []
         }
         
         return encodedData.map { try! JSONDecoder().decode(ScreenSetting.self, from: $0) }
     }
+    
 }
 
 public struct ScreenSetting: Codable {
     public var title: String
     public var controllerName: String
-    let timeVisit: Array<Int>
+    public var timeVisit: Array<Int>
 }
+

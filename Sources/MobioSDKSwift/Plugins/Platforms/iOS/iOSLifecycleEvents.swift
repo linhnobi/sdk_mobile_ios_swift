@@ -1,24 +1,20 @@
 //
 //  iOSLifecycleEvents.swift
-//  AppDemo
 //
 //  Created by LinhNobi on 24/08/2021.
 //
 
 import Foundation
 import UIKit
-//: iOSLifecycle
-class iOSLifecycleEvents {
+
+class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
     
+    static let shared = iOSLifecycleEvents()
     var analytics: MobioSDK?
-    
     static var versionKey = "MobioVersionKey"
     static var buildKey = "MobioBuildKeyV2"
     
-    init() {
-        
-    }
-    func application() {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         
         let previousVersion = UserDefaults.standard.string(forKey: Self.versionKey)
         let previousBuild = UserDefaults.standard.string(forKey: Self.buildKey)
@@ -49,6 +45,7 @@ class iOSLifecycleEvents {
         
         if currentBuild != previousBuild {
             print("Application Updated")
+            //            analytics?.track(name: <#T##String#>, properties: <#T##Any#>)
             HTTPClient.http.postMethod(event: "sdk_mobile_update_app",
                                        profile_info: [
                                         "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
@@ -59,9 +56,10 @@ class iOSLifecycleEvents {
                                         "build": currentBuild ?? "",
                                        ])
         }
-        
+
         // Application Opened
         print("Application Open")
+        let anonymousId: String = UUID().uuidString
         HTTPClient.http.postMethod(event: "sdk_mobile_open_app",
                                    profile_info: [
                                     //                                    "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
@@ -71,8 +69,9 @@ class iOSLifecycleEvents {
                                         //                                                    "device_name": "ios"
                                         
                                     ],
+                                    "customer_id": anonymousId,
                                     "source": "APP",
-                                    //                    "push_id": ""
+                                    "push_id": "xxxx"
                                    ],properties: [
                                     "version": currentVersion ?? "",
                                     "build": currentBuild ?? "",
@@ -82,45 +81,15 @@ class iOSLifecycleEvents {
         UserDefaults.standard.setValue(currentBuild, forKey: Self.buildKey)
         
     }
-    
+
     func applicationWillEnterForeground(_ application: UIApplication) {
         print("vào applicationWillEnterForeground")
         // Application Opened - from background
     }
-    
+
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Application Backgrounded
         print("vào applicationDidEnterBackground")
     }
-    
+
 }
-
-//extension UIViewController {
-//@objc dynamic func _tracked_viewWillAppear(_ animated: Bool) {
-//
-//    print("ClassName@: "+String(describing: type(of: self)))
-//    _tracked_viewWillAppear(animated)
-//}
-
-
-
-//static func swizzle() {
-//    if self != UIViewController.self {
-//        return
-//    }
-//    let _: () = {
-//        let originalSelector =
-//            #selector(UIViewController.viewWillAppear(_:))
-//        let swizzledSelector =
-//            #selector(UIViewController._tracked_viewWillAppear(_:))
-//        let originalMethod =
-//            class_getInstanceMethod(self, originalSelector)
-//        let swizzledMethod =
-//            class_getInstanceMethod(self, swizzledSelector)
-//        method_exchangeImplementations(originalMethod!, swizzledMethod!);
-//    }()
-//}
-//}
-
-
-

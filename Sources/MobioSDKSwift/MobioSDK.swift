@@ -8,8 +8,9 @@
 import Foundation
 
 public class MobioSDK {
+//    let tracking = Tracking.shared
     internal var configuration: Configuration
-//    internal let iOSlife = iOSLifecycleMonitor()
+    internal let iOSlife = iOSLifecycleMonitor()
     
     public init(configuration: Configuration) {
         self.configuration = configuration
@@ -24,10 +25,10 @@ public class MobioSDK {
 //        print("machineName : \(machineName())")
 //        print("modelName : \(String(describing: modelName))")
         // print("uuID : \(uuID)")
-        print("iOSLifecycleEvents")
-        let iOSLifecycle = iOSLifecycleEvents()
-        iOSLifecycle.application()
-        let iOSlife = iOSLifecycleMonitor()
+//        print("iOSLifecycleEvents")
+//        let iOSLifecycle = iOSLifecycleEvents()
+//        iOSLifecycle.application()
+//        let iOSlife = iOSLifecycleMonitor()
 //        iOSLifecycle.setupListeners()
 //        let context = Context(name: "Test")
 //        print("data \(context.staticContext)")

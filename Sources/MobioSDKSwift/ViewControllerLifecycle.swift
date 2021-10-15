@@ -62,11 +62,14 @@ public extension UIViewController {
         public override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             applyBehaviors { $0.afterAppearing($1) }
+//            getScreenView2()
             self.timer?.invalidate()
             self.timer = nil
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             print("Start : \(Date())")
             
+//            let configScreens = getConfigAllScreen()
+//            print("configScreens \(configScreens)")
         }
         
         public override func viewWillDisappear(_ animated: Bool) {
@@ -79,6 +82,8 @@ public extension UIViewController {
         public override func viewDidDisappear(_ animated: Bool) {
             super.viewDidDisappear(animated)
             applyBehaviors { $0.afterDisappearing($1) }
+            print("viewDidDisappear")
+            self.timer?.invalidate()
         }
         
         public override func viewWillLayoutSubviews() {
@@ -118,24 +123,56 @@ public extension UIViewController {
 
             return controllerName
         }
+        
+        private func getScreenView(controllerName: String, screens: Array<ScreenSetting>) -> [ScreenSetting]{
+            var result: Array<ScreenSetting> = []
+            for screen in screens {
+                if screen.controllerName.toString() == controllerName {
+                    result = [screen]
+                }
+            }
+            return result
+        }
+        private func getScreenView2() {
+            var result: Array<ScreenSetting> = []
+            let screens = getConfigAllScreen()
+            let controllerName = getControllerName()
+            for screen in screens {
+                if screen.controllerName.toString() == controllerName {
+                    result.append(ScreenSetting(title: screen.title, controllerName: screen.controllerName, timeVisit: screen.timeVisit))
+                }
+            }
+            UserDefaults.standard.set(result, forKey: "m_screen_config_view")
+            UserDefaults.standard.synchronize()
+//            print("result \(UserDefaults.standard.array(forKey: "m_screen_config_view"))")
+        }
 
         @objc private func timerAction() {
             countTime += 1
 //            print("counter \(countTime)")
-            
+
             let configScreens = getConfigAllScreen()
+
             if configScreens.count == 0 {
                 self.timer?.invalidate()
                 return
             }
-            
+
             let controllerName = getControllerName()
-            if configScreens[0].controllerName.toString() != controllerName {
+            let screenView = getScreenView(controllerName: controllerName, screens: configScreens)
+//            let screenView = UserDefaults.standard.array(forKey: "m_screen_config_view") as? [ScreenSetting]
+//            print(" screenView \(screenView)")
+//            let encodedData = UserDefaults.standard.array(forKey: ScreenSettingUserDefaults)
+            
+//            encodedData.map { try! JSONDecoder().decode(ScreenSetting.self, from: $0) }
+            
+            
+            if screenView.count == 0 {
                 self.timer?.invalidate()
                 return
             }
-            
-            let timeConfig = configScreens[0].timeVisit
+
+            let timeConfig = screenView[0].timeVisit
             if timeConfig.count == 0 {
                 self.timer?.invalidate()
                 return
@@ -151,13 +188,17 @@ public extension UIViewController {
                                                ],
                                                properties: [
                                                 "time_visit": countTime,
-                                                "screen_name": configScreens[0].title,
+                                                "screen_name": screenView[0].title,
                                                ])
                 }
 
                 if countTime == timeConfig[timeConfig.count - 1] {
                     self.timer?.invalidate()
                 }
+            }
+            // Khởi tạo lại giá trị countTime khi quay lại màn hình
+            if countTime > timeConfig[timeConfig.count - 1] {
+                countTime = 0
             }
         }
 
