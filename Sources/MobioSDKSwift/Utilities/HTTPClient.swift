@@ -49,13 +49,21 @@ public class HTTPClient {
 
         let context = Context(name: "Test")
         context.staticContext["traits"] = properties
-        
+        profile_info["push_id"] = [
+            "push_id": "6949fda98338a02427e28d00bbd5203c7c0b754311ed23878577bd212cfeac0c",
+            "app_id": "IOS",
+            "is_logged": true,
+            "last_access": Date().iso8601(),
+            "os_type": 1,
+            "lang": "VI"
+        ]
+
         let anonymousId: String = UUID().uuidString
         let params = [
             "data": [
                 "anonymousId": anonymousId,
                 "context": context.staticContext,
-                "profile_info": profile_info,
+                "profile_info":  v,
 //                "profile_info": [
                     //                    "email": "linhtn@mobio.vn",
                     //                    "source": "APP"

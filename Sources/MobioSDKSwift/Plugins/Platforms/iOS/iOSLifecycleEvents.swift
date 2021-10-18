@@ -71,14 +71,6 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
                                     ],
                                     "customer_id": anonymousId,
                                     "source": "APP",
-                                    "push_id": [
-                                        "push_id": "6949fda98338a02427e28d00bbd5203c7c0b754311ed23878577bd212cfeac0c",
-                                        "app_id": "IOS",
-                                        "is_logged": true,
-                                        "last_access": Date().iso8601(),
-                                        "os_type": 1,
-                                        "lang": "VI"
-                                    ]
                                    ],properties: [
                                     "version": currentVersion ?? "",
                                     "build": currentBuild ?? "",
