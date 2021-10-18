@@ -181,9 +181,11 @@ public extension UIViewController {
             for time in timeConfig {
                 if countTime == time {
                     print("counter \(countTime)")
+                    let anonymousId: String = UUID().uuidString
                     HTTPClient.http.postMethod(event: "view_scree_by_time",
                                                profile_info: [
                                                 "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
+                                                "customer_id": anonymousId,
                                                 "push_id": [
                                                             "push_id": PushNotification.getDeviceToken(),
                                                             "app_id": "IOS",
