@@ -21,3 +21,9 @@ struct PushNotification {
 }
 
 
+extension MobioSDK {
+    public func setDeviceToken(deviceToken: String) {
+        PushNotification.setDeviceToken(deviceToken: deviceToken)
+    }
+}
+

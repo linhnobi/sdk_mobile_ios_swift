@@ -185,7 +185,7 @@ public extension UIViewController {
                                                profile_info: [
                                                 "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
                                                 "push_id": [
-                                                            "push_id": "1c2193fdfac9dbb03f6eca61b944394db65b2347315c4abec52d73f12562915f",
+                                                            "push_id": PushNotification.getDeviceToken(),
                                                             "app_id": "IOS",
                                                             "is_logged": true,
                                                             "last_access": Date().iso8601(),
