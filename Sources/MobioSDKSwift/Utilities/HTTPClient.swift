@@ -49,14 +49,14 @@ public class HTTPClient {
 
         let context = Context(name: "Test")
         context.staticContext["traits"] = properties
-        profile_info["push_id"] = [
-            "push_id": "1c2193fdfac9dbb03f6eca61b944394db65b2347315c4abec52d73f12562915f",
-            "app_id": "IOS",
-            "is_logged": true,
-            "last_access": Date().iso8601(),
-            "os_type": 1,
-            "lang": "VI"
-        ]
+//        profile_info["push_id"] = [
+//            "push_id": "1c2193fdfac9dbb03f6eca61b944394db65b2347315c4abec52d73f12562915f",
+//            "app_id": "IOS",
+//            "is_logged": true,
+//            "last_access": Date().iso8601(),
+//            "os_type": 1,
+//            "lang": "VI"
+//        ]
 
         let anonymousId: String = UUID().uuidString
         let params = [
