@@ -63,7 +63,7 @@ public class HTTPClient {
             "data": [
                 "anonymousId": anonymousId,
                 "context": context.staticContext,
-                "profile_info":  v,
+                "profile_info":  profile_info,
 //                "profile_info": [
                     //                    "email": "linhtn@mobio.vn",
                     //                    "source": "APP"
