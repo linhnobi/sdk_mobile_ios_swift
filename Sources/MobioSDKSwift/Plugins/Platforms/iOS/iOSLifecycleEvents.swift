@@ -56,7 +56,7 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
                                         "build": currentBuild ?? "",
                                        ])
         }
-
+        
         // Application Opened
         print("Application Open")
         let anonymousId: String = UUID().uuidString
@@ -71,7 +71,14 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
                                     ],
                                     "customer_id": anonymousId,
                                     "source": "APP",
-                                    "push_id": "xxxx"
+                                    "push_id": [
+                                        "push_id": "6949fda98338a02427e28d00bbd5203c7c0b754311ed23878577bd212cfeac0c",
+                                        "app_id": "IOS",
+                                        "is_logged": true,
+                                        "last_access": Date().iso8601(),
+                                        "os_type": 1,
+                                        "lang": "VI"
+                                    ]
                                    ],properties: [
                                     "version": currentVersion ?? "",
                                     "build": currentBuild ?? "",
@@ -81,15 +88,15 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
         UserDefaults.standard.setValue(currentBuild, forKey: Self.buildKey)
         
     }
-
+    
     func applicationWillEnterForeground(_ application: UIApplication) {
         print("vào applicationWillEnterForeground")
         // Application Opened - from background
     }
-
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Application Backgrounded
         print("vào applicationDidEnterBackground")
     }
-
+    
 }
