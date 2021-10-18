@@ -50,7 +50,7 @@ public class HTTPClient {
         let context = Context(name: "Test")
         context.staticContext["traits"] = properties
         profile_info["push_id"] = [
-            "push_id": "6949fda98338a02427e28d00bbd5203c7c0b754311ed23878577bd212cfeac0c",
+            "push_id": "1c2193fdfac9dbb03f6eca61b944394db65b2347315c4abec52d73f12562915f",
             "app_id": "IOS",
             "is_logged": true,
             "last_access": Date().iso8601(),
