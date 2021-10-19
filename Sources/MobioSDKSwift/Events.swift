@@ -123,51 +123,7 @@ extension MobioSDK {
         iOSLifecycleMonitor.shared.setupListeners(application)
     }
     
-//    public func notificationResponse(notification: NSNotification){
-//        print("notificationResponse")
-//        switch (notification.name) {
-//        case UIApplication.didEnterBackgroundNotification:
-//            //            self.didEnterBackground(notification: notification)
-//            print("didEnterBackground")
-//        case UIApplication.willEnterForegroundNotification:
-////            self.applicationWillEnterForeground(notification: notification)
-//            print("applicationWillEnterForeground")
-//        case UIApplication.didFinishLaunchingNotification:
-//            //            self.didFinishLaunching(notification: notification)
-//            print("didFinishLaunching")
-//        case UIApplication.didBecomeActiveNotification:
-//            //            self.didBecomeActive(notification: notification)
-//            print("didBecomeActive")
-//        case UIApplication.willResignActiveNotification:
-//            //            self.willResignActive(notification: notification)
-//            print("willResignActive")
-//        case UIApplication.didReceiveMemoryWarningNotification:
-//            //            self.didReceiveMemoryWarning(notification: notification)
-//            print("didReceiveMemoryWarning")
-//        case UIApplication.significantTimeChangeNotification:
-//            //            self.significantTimeChange(notification: notification)
-//            print("significantTimeChange")
-//        case UIApplication.backgroundRefreshStatusDidChangeNotification:
-//            //            self.backgroundRefreshDidChange(notification: notification)
-//            print("backgroundRefreshDidChange")
-//        default:
-//
-//            break
-//        }
-//    }
-    
-//    public func appNotifications2() -> Array<NSNotification.Name> {
-//     let appNotifications: [NSNotification.Name] = [UIApplication.didEnterBackgroundNotification,
-//                                                   UIApplication.willEnterForegroundNotification,
-//                                                   UIApplication.didFinishLaunchingNotification,
-//                                                   UIApplication.didBecomeActiveNotification,
-//                                                   UIApplication.willResignActiveNotification,
-//                                                   UIApplication.didReceiveMemoryWarningNotification,
-//                                                   UIApplication.willTerminateNotification,
-//                                                   UIApplication.significantTimeChangeNotification,
-//                                                   UIApplication.backgroundRefreshStatusDidChangeNotification]
-//        return appNotifications
-//    }
+
 }
 
 
