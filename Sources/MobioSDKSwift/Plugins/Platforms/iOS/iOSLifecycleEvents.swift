@@ -18,38 +18,57 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
         
         let previousVersion = UserDefaults.standard.string(forKey: Self.versionKey)
         let previousBuild = UserDefaults.standard.string(forKey: Self.buildKey)
-        
+        let anonymousId: String = UUID().uuidString
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
         let isUserOpenApp = UserDefaults.standard.bool(forKey: "appOpenFirts")
         
         if (!isUserOpenApp) {
             print("Application Open First \(isUserOpenApp)")
-            //            events.track(name: "application_open_first", properties: [
-            //                "version": currentVersion ?? "",
-            //                "build": currentBuild ?? "",
-            //                "time open": "" //Date()
-            //            ])
+            HTTPClient.http.postMethod(event: "sdk_mobile_test_open_first_app",
+                                       profile_info: [
+                                        "device": [
+                                            "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
+                                            //                                                    "source": "SeaBank",
+                                            //                                                    "device_name": "ios"
+                                        ],
+                                        "customer_id": anonymousId,
+                                        "source": "APP",
+                                       ],properties: [
+                                        "version": currentVersion ?? "",
+                                        "build": currentBuild ?? "",
+                                       ])
             UserDefaults.standard.set(true, forKey: "appOpenFirts")
             UserDefaults.standard.synchronize()
         }
         
         if previousBuild != nil {
             print("Application Installed")
-            //            events.track(name: "application_installed_ig6", properties: [
-            //                "version": currentVersion ?? "",
-            //                 "build": currentBuild ?? ""
-            //            ])
-            
+            HTTPClient.http.postMethod(event: "sdk_mobile_test_installed_app",
+                                       profile_info: [
+                                        "device": [
+                                            "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
+                                        ],
+                                        "customer_id": anonymousId,
+                                        "source": "APP",
+                                       ],properties: [
+                                        "version": currentVersion ?? "",
+                                        "build": currentBuild ?? "",
+                                       ])
         }
         
         if currentBuild != previousBuild {
             print("Application Updated")
-            //            analytics?.track(name: <#T##String#>, properties: <#T##Any#>)
-            HTTPClient.http.postMethod(event: "sdk_mobile_update_app",
+            //            analytics?.track(name: "sdk_mobile_test_open_update_app",
+            //                             properties: [
+            //                "version": currentVersion ?? "",
+            //                "build": currentBuild ?? "",
+            //            ])
+            
+            HTTPClient.http.postMethod(event: "sdk_mobile_test_open_update_app",
                                        profile_info: [
-                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
-                                        //                    "push_id": ""
+                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
+                                        "customer_id": anonymousId,
                                        ],
                                        properties: [
                                         "version": currentVersion ?? "",
@@ -59,15 +78,10 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
         
         // Application Opened
         print("Application Open")
-        let anonymousId: String = UUID().uuidString
-        HTTPClient.http.postMethod(event: "sdk_mobile_open_app",
+        HTTPClient.http.postMethod(event: "sdk_mobile_test_open_app",
                                    profile_info: [
-                                    //                                    "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
                                     "device": [
                                         "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
-                                        //                                                    "source": "SeaBank",
-                                        //                                                    "device_name": "ios"
-                                        
                                     ],
                                     "customer_id": anonymousId,
                                     "source": "APP",

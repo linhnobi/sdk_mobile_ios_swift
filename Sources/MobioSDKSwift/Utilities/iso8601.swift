@@ -12,8 +12,9 @@ var __mobio_iosDateFormatter = MobioISO8601DateFormatter()
 class MobioISO8601DateFormatter: DateFormatter {
     override init() {
         super.init()
-        
-        self.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS:'Z'"
+
+//        self.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS:'Z'"
+        self.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
         self.locale = Locale(identifier: "en_US_POSIX")
         self.timeZone = TimeZone(secondsFromGMT: 0)
     }

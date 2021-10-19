@@ -180,20 +180,12 @@ public extension UIViewController {
 
             for time in timeConfig {
                 if countTime == time {
-                    print("counter \(countTime)")
+//                    print("counter \(countTime)")
                     let anonymousId: String = UUID().uuidString
-                    HTTPClient.http.postMethod(event: "view_scree_by_time",
+                    HTTPClient.http.postMethod(event: "sdk_mobile_test_time_visit_app",
                                                profile_info: [
                                                 "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
                                                 "customer_id": anonymousId,
-                                                "push_id": [
-                                                            "push_id": PushNotification.getDeviceToken(),
-                                                            "app_id": "IOS",
-                                                            "is_logged": true,
-                                                            "last_access": Date().iso8601(),
-                                                            "os_type": 1,
-                                                            "lang": "VI"
-                                                        ]
                                                ],
                                                properties: [
                                                 "time_visit": countTime,

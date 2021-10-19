@@ -37,6 +37,5 @@ extension Scroll: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
     }
-    
-    
+
 }
