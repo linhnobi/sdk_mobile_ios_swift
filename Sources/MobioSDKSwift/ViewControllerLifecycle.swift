@@ -212,6 +212,12 @@ public extension UIViewController {
         behaviorVC.didMove(toParent: self)
     }
 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            super.touchesBegan(touches, with: event)
+        print("chạm \(touches.hashValue)")
+        print("event \(event?.type)")
+//            self.view.endEditing(true)
+        }
 }
 
 extension UIApplication {
