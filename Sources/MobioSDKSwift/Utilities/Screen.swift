@@ -20,10 +20,13 @@ extension MobioSDK {
         if configScreen.count == 0 {
             configScreen.append(ScreenSetting(title: screens.title, controllerName: screens.controllerName, timeVisit: screens.timeVisit))
         } else {
-                for item in configScreen {
+            for (index,item) in configScreen.enumerated() {
                     if (screens.controllerName == item.controllerName) {
-                        screens.timeVisit = item.timeVisit
-                        screens.title = item.title
+                        configScreen[index].timeVisit = screens.timeVisit
+                        configScreen[index].title = screens.title
+                        let data = configScreen.map { try? JSONEncoder().encode($0) }
+                        UserDefaults.standard.set(data, forKey: ScreenSettingUserDefaults)
+                        UserDefaults.standard.synchronize()
                         return
                     }
                 }
