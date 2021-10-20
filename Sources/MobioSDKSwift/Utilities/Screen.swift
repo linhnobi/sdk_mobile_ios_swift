@@ -22,6 +22,8 @@ extension MobioSDK {
         } else {
                 for item in configScreen {
                     if (screens.controllerName == item.controllerName) {
+                        screens.timeVisit = item.timeVisit
+                        screens.title = item.title
                         return
                     }
                 }
