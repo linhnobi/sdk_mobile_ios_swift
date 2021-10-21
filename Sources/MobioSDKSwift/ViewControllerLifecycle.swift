@@ -63,22 +63,24 @@ public extension UIViewController {
         public override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             applyBehaviors { $0.afterAppearing($1) }
-//            getScreenView2()
+            //            getScreenView2()
             self.timer?.invalidate()
             self.timer = nil
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             print("Start : \(Date())")
-            screenTime(eventKey: "sdk_mobile_test_screen_start_in_app")
-//            let configScreens = getConfigAllScreen()
-//            print("configScreens \(configScreens)")
+            
+            //
+            screenStart(eventKey: "sdk_mobile_test_screen_start_in_app")
+            //            let configScreens = getConfigAllScreen()
+            //            print("configScreens \(configScreens)")
         }
         
         public override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
             applyBehaviors { $0.beforeDisappearing($1) }
-
+            
             print("End : \(Date())")
-            screenTime(eventKey: "sdk_mobile_test_screen_end_in_app")
+            screenEnd(eventKey: "sdk_mobile_test_screen_end_in_app")
         }
         
         public override func viewDidDisappear(_ animated: Bool) {
@@ -111,7 +113,7 @@ public extension UIViewController {
             guard let encodedData = UserDefaults.standard.array(forKey: ScreenSettingUserDefaults) as? [Data] else {
                 return []
             }
-
+            
             return encodedData.map { try! JSONDecoder().decode(ScreenSetting.self, from: $0) }
         }
         
@@ -119,10 +121,10 @@ public extension UIViewController {
             let topVC = UIApplication.getTopViewController()
             let className = NSStringFromClass(topVC!.classForCoder).toString()
             let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String
-
+            
             var controllerName = className.replacingOccurrences(of: appName!, with: "", options: NSString.CompareOptions.literal, range:nil)
             controllerName = controllerName.replacingOccurrences(of: ".", with: "", options: NSString.CompareOptions.literal, range:nil)
-
+            
             return controllerName
         }
         
@@ -146,44 +148,44 @@ public extension UIViewController {
             }
             UserDefaults.standard.set(result, forKey: "m_screen_config_view")
             UserDefaults.standard.synchronize()
-//            print("result \(UserDefaults.standard.array(forKey: "m_screen_config_view"))")
+            //            print("result \(UserDefaults.standard.array(forKey: "m_screen_config_view"))")
         }
-
+        
         @objc private func timerAction() {
             countTime += 1
-//            print("counter \(countTime)")
-
+            //            print("counter \(countTime)")
+            
             let configScreens = getConfigAllScreen()
-
+            
             if configScreens.count == 0 {
                 self.timer?.invalidate()
                 return
             }
-
+            
             let controllerName = getControllerName()
             let screenView = getScreenView(controllerName: controllerName, screens: configScreens)
-//            let screenView = UserDefaults.standard.array(forKey: "m_screen_config_view") as? [ScreenSetting]
-//            print(" screenView \(screenView)")
-//            let encodedData = UserDefaults.standard.array(forKey: ScreenSettingUserDefaults)
+            //            let screenView = UserDefaults.standard.array(forKey: "m_screen_config_view") as? [ScreenSetting]
+            //            print(" screenView \(screenView)")
+            //            let encodedData = UserDefaults.standard.array(forKey: ScreenSettingUserDefaults)
             
-//            encodedData.map { try! JSONDecoder().decode(ScreenSetting.self, from: $0) }
+            //            encodedData.map { try! JSONDecoder().decode(ScreenSetting.self, from: $0) }
             
             
             if screenView.count == 0 {
                 self.timer?.invalidate()
                 return
             }
-
+            
             let timeConfig = screenView[0].timeVisit
             if timeConfig.count == 0 {
                 self.timer?.invalidate()
                 return
             }
-
+            
             for time in timeConfig {
                 if countTime == time {
-//                    print("counter \(countTime)")
-//                    let anonymousId: String = UUID().uuidString
+                    //                    print("counter \(countTime)")
+                    //                    let anonymousId: String = UUID().uuidString
                     HTTPClient.http.postMethod(event: "sdk_mobile_test_time_visit_app",
                                                profile_info: [
                                                 "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
@@ -194,7 +196,7 @@ public extension UIViewController {
                                                 "screen_name": screenView[0].title,
                                                ])
                 }
-
+                
                 if countTime == timeConfig[timeConfig.count - 1] {
                     self.timer?.invalidate()
                 }
@@ -204,8 +206,8 @@ public extension UIViewController {
                 countTime = 0
             }
         }
-
-        private func screenTime(eventKey: String) {
+        
+        private func screenStart(eventKey: String) {
             let configScreens = getConfigAllScreen()
             
             if configScreens.count == 0 {
@@ -218,6 +220,8 @@ public extension UIViewController {
             if screenView.count == 0 {
                 return
             }
+            UserDefaults.standard.set(screenView[0].title, forKey: "m_screen_current_view")
+            UserDefaults.standard.synchronize()
             
             HTTPClient.http.postMethod(event: eventKey,
                                        profile_info: [
@@ -229,33 +233,47 @@ public extension UIViewController {
                                         "screen_name": screenView[0].title,
                                        ])
         }
+        
+        private func screenEnd(eventKey: String) {
+            
+            let screenName = UserDefaults.standard.string(forKey: "m_screen_current_view")
+            HTTPClient.http.postMethod(event: eventKey,
+                                       profile_info: [
+                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
+                                        "customer_id": anonymousId,
+                                       ],
+                                       properties: [
+                                        "time": Date().iso8601(),
+                                        "screen_name": screenName,
+                                       ])
+        }
     }
-
+    
     func addBehaviors(_ behaviors: [ViewControllerLifeCycleBehavior]) {
         let behaviorVC = LifeCycleBehaviorViewController(behaviors: behaviors)
         addChild(behaviorVC)
         view.addSubview(behaviorVC.view)
         behaviorVC.didMove(toParent: self)
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            super.touchesBegan(touches, with: event)
+        super.touchesBegan(touches, with: event)
         print("chạm \(touches.hashValue)")
-//        print("event \(event?.type)")
-//            self.view.endEditing(true)
-        }
+        //        print("event \(event?.type)")
+        //            self.view.endEditing(true)
+    }
 }
 
 extension UIApplication {
-
+    
     class func getTopViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-
+        
         if let nav = base as? UINavigationController {
             return getTopViewController(base: nav.visibleViewController)
-
+            
         } else if let tab = base as? UITabBarController, let selected = tab.selectedViewController {
             return getTopViewController(base: selected)
-
+            
         } else if let presented = base?.presentedViewController {
             return getTopViewController(base: presented)
         }
