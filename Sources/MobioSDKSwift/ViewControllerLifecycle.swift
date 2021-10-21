@@ -37,6 +37,7 @@ public extension UIViewController {
         private let behaviors: [ViewControllerLifeCycleBehavior]
         weak var timer:Timer?
         var countTime: Int = 0
+        let anonymousId: String = UUID().uuidString
         
         init(behaviors: [ViewControllerLifeCycleBehavior]) {
             self.behaviors = behaviors
@@ -67,7 +68,7 @@ public extension UIViewController {
             self.timer = nil
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             print("Start : \(Date())")
-            
+            screenTime(eventKey: "sdk_mobile_test_screen_start_in_app")
 //            let configScreens = getConfigAllScreen()
 //            print("configScreens \(configScreens)")
         }
@@ -77,6 +78,7 @@ public extension UIViewController {
             applyBehaviors { $0.beforeDisappearing($1) }
 
             print("End : \(Date())")
+            screenTime(eventKey: "sdk_mobile_test_screen_end_in_app")
         }
         
         public override func viewDidDisappear(_ animated: Bool) {
@@ -181,7 +183,7 @@ public extension UIViewController {
             for time in timeConfig {
                 if countTime == time {
 //                    print("counter \(countTime)")
-                    let anonymousId: String = UUID().uuidString
+//                    let anonymousId: String = UUID().uuidString
                     HTTPClient.http.postMethod(event: "sdk_mobile_test_time_visit_app",
                                                profile_info: [
                                                 "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
@@ -203,6 +205,30 @@ public extension UIViewController {
             }
         }
 
+        private func screenTime(eventKey: String) {
+            let configScreens = getConfigAllScreen()
+            
+            if configScreens.count == 0 {
+                return
+            }
+            
+            let controllerName = getControllerName()
+            let screenView = getScreenView(controllerName: controllerName, screens: configScreens)
+            print("screenView \(screenView)")
+            if screenView.count == 0 {
+                return
+            }
+            
+            HTTPClient.http.postMethod(event: eventKey,
+                                       profile_info: [
+                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
+                                        "customer_id": anonymousId,
+                                       ],
+                                       properties: [
+                                        "time": Date().iso8601(),
+                                        "screen_name": screenView[0].title,
+                                       ])
+        }
     }
 
     func addBehaviors(_ behaviors: [ViewControllerLifeCycleBehavior]) {
@@ -215,7 +241,7 @@ public extension UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             super.touchesBegan(touches, with: event)
         print("chạm \(touches.hashValue)")
-        print("event \(event?.type)")
+//        print("event \(event?.type)")
 //            self.view.endEditing(true)
         }
 }
