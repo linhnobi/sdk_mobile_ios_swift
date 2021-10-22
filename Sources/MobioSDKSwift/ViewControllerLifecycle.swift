@@ -82,14 +82,15 @@ public extension UIViewController {
             let screenName = UserDefaults.standard.string(forKey: "m_screen_current_view")
             UserDefaults.standard.set(screenName, forKey: "m_screen_exit_view")
             UserDefaults.standard.synchronize()
-
+            screenEnd(eventKey: "sdk_mobile_test_screen_end_in_app")
+            print("viewWillDisappear")
         }
         
         public override func viewDidDisappear(_ animated: Bool) {
             super.viewDidDisappear(animated)
             applyBehaviors { $0.afterDisappearing($1) }
             print("viewDidDisappear")
-            screenEnd(eventKey: "sdk_mobile_test_screen_end_in_app")
+            
             self.timer?.invalidate()
         }
         
