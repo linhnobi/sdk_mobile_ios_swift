@@ -68,6 +68,7 @@ public class HTTPClient {
         ] as [String : Any]
         
         profile.merge(["push_id": pushId]) { (_, new) in new }
+        profile.merge(["source": "APP"]) { (_, new) in new }
         
         let anonymousId: String = UUID().uuidString
         let params = [
