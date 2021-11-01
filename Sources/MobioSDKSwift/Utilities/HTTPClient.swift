@@ -82,6 +82,7 @@ public class HTTPClient {
                     "version": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
                 ],
                 "type": "track",
+                "event_data": traits
             ]
         ]
 
