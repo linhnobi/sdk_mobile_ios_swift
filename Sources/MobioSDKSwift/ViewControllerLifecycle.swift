@@ -37,7 +37,7 @@ public extension UIViewController {
         private let behaviors: [ViewControllerLifeCycleBehavior]
         weak var timer:Timer?
         var countTime: Int = 0
-        let anonymousId: String = UUID().uuidString
+//        let anonymousId: String = UUID().uuidString
         
         init(behaviors: [ViewControllerLifeCycleBehavior]) {
             self.behaviors = behaviors
@@ -193,7 +193,7 @@ public extension UIViewController {
                     HTTPClient.http.postMethod(event: "sdk_mobile_test_time_visit_app",
                                                profile_info: [
                                                 "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
-                                                "customer_id": anonymousId,
+//                                                "customer_id": anonymousId,
                                                ],
                                                properties: [
                                                 "time_visit": countTime,
@@ -230,7 +230,7 @@ public extension UIViewController {
             HTTPClient.http.postMethod(event: eventKey,
                                        profile_info: [
                                         "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
-                                        "customer_id": anonymousId,
+//                                        "customer_id": anonymousId,
                                        ],
                                        properties: [
                                         "time": Date().iso8601(),
@@ -244,7 +244,7 @@ public extension UIViewController {
             HTTPClient.http.postMethod(event: eventKey,
                                        profile_info: [
                                         "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
-                                        "customer_id": anonymousId,
+//                                        "customer_id": anonymousId,
                                        ],
                                        properties: [
                                         "time": Date().iso8601(),

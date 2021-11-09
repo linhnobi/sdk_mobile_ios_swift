@@ -16,15 +16,15 @@ public class HTTPClient {
     private var session: URLSession
     private var apiHost: String
     private var apiSync: String
-
+    
     init(apiHost: String? = nil, apiSync: String? = nil) {
-
+        
         if let apiHost = apiHost {
             self.apiHost = apiHost
         } else {
             self.apiHost = Self.defaultAPIHost
         }
-
+        
         if let apiSync = apiSync {
             self.apiSync = apiSync
         } else {
@@ -70,10 +70,19 @@ public class HTTPClient {
         profile.merge(["push_id": pushId]) { (_, new) in new }
         profile.merge(["source": "APP"]) { (_, new) in new }
         
-        let anonymousId: String = UUID().uuidString
+        var customerId = UserDefaults.standard.string(forKey: "m_customerId")
+        
+        if customerId == nil {
+            customerId = UUID().uuidString
+            UserDefaults.standard.setValue(customerId, forKey: "m_customerId")
+            UserDefaults.standard.synchronize()
+        }
+        
+        profile.merge(["customer_id": customerId!]) { (_, new) in new }
+        
         let params = [
             "data": [
-                "anonymousId": anonymousId,
+                "anonymousId": customerId!,
                 "context": context.staticContext,
                 "profile_info": profile,
                 "event_key": event,
@@ -85,7 +94,7 @@ public class HTTPClient {
                 "event_data": traits
             ]
         ]
-
+        
         // Create model
         //            struct UploadData: Codable {
         //                let name: String

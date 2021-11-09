@@ -79,11 +79,11 @@ extension MobioSDK {
     
     public func track(name: String, properties: Any) {
         do {
-            let anonymousId: String = UUID().uuidString
+//            let anonymousId: String = UUID().uuidString
             HTTPClient.http.postMethod(event: name,
                 profile_info: [
                     "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
-                    "customer_id": anonymousId
+//                    "customer_id": anonymousId
 //                    "push_id": ""
                 ],
                 properties: properties)

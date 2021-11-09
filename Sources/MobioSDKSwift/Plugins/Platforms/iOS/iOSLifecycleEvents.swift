@@ -18,7 +18,7 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
         
         let previousVersion = UserDefaults.standard.string(forKey: Self.versionKey)
         let previousBuild = UserDefaults.standard.string(forKey: Self.buildKey)
-        let anonymousId: String = UUID().uuidString
+//        let anonymousId: String = UUID().uuidString
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
         let isUserOpenApp = UserDefaults.standard.bool(forKey: "appOpenFirts")
@@ -27,12 +27,13 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
             print("Application Open First \(isUserOpenApp)")
             HTTPClient.http.postMethod(event: "sdk_mobile_test_open_first_app",
                                        profile_info: [
-                                        "device": [
-                                            "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
-                                            //                                                    "source": "SeaBank",
-                                            //                                                    "device_name": "ios"
-                                        ],
-                                        "customer_id": anonymousId,
+//                                        "device": [
+//                                            "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
+//                                            //                                                    "source": "SeaBank",
+//                                            //                                                    "device_name": "ios"
+//                                        ],
+                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
+//                                        "customer_id": anonymousId,
                                         "source": "APP",
                                        ],properties: [
                                         "version": currentVersion ?? "",
@@ -46,10 +47,11 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
             print("Application Installed")
             HTTPClient.http.postMethod(event: "sdk_mobile_test_installed_app",
                                        profile_info: [
-                                        "device": [
-                                            "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
-                                        ],
-                                        "customer_id": anonymousId,
+//                                        "device": [
+//                                            "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
+//                                        ],
+//                                        "customer_id": anonymousId,
+                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
                                         "source": "APP",
                                        ],properties: [
                                         "version": currentVersion ?? "",
@@ -68,7 +70,7 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
             HTTPClient.http.postMethod(event: "sdk_mobile_test_open_update_app",
                                        profile_info: [
                                         "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
-                                        "customer_id": anonymousId,
+//                                        "customer_id": anonymousId,
                                        ],
                                        properties: [
                                         "version": currentVersion ?? "",
@@ -80,10 +82,11 @@ class iOSLifecycleEvents: NSObject , UIApplicationDelegate {
         print("Application Open")
         HTTPClient.http.postMethod(event: "sdk_mobile_test_open_app",
                                    profile_info: [
-                                    "device": [
-                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
-                                    ],
-                                    "customer_id": anonymousId,
+//                                    "device": [
+//                                        "device_id": UIDevice.current.identifierForVendor?.uuidString ?? ""
+//                                    ],
+//                                    "customer_id": anonymousId,
+                                    "device_id": UIDevice.current.identifierForVendor?.uuidString ?? "",
                                     "source": "APP",
                                    ],properties: [
                                     "version": currentVersion ?? "",
