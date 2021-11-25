@@ -66,6 +66,7 @@ public extension UIViewController {
             //            getScreenView2()
             self.timer?.invalidate()
             self.timer = nil
+            self.countTime = 0
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             print("Start : \(Date())")
             
@@ -157,7 +158,7 @@ public extension UIViewController {
         
         @objc private func timerAction() {
             countTime += 1
-            //            print("counter \(countTime)")
+                        
             
             let configScreens = getConfigAllScreen()
             
@@ -167,6 +168,7 @@ public extension UIViewController {
             }
             
             let controllerName = getControllerName()
+            print("counter \(controllerName) - \(countTime)")
             let screenView = getScreenView(controllerName: controllerName, screens: configScreens)
             //            let screenView = UserDefaults.standard.array(forKey: "m_screen_config_view") as? [ScreenSetting]
             //            print(" screenView \(screenView)")
@@ -176,7 +178,7 @@ public extension UIViewController {
             
             
             if screenView.count == 0 {
-                self.timer?.invalidate()
+//                self.timer?.invalidate()
                 return
             }
             
@@ -271,14 +273,19 @@ public extension UIViewController {
 extension UIApplication {
     
     class func getTopViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        
+
         if let nav = base as? UINavigationController {
-            return getTopViewController(base: nav.visibleViewController)
+            return getTopViewController(base: nav.topViewController)
             
         } else if let tab = base as? UITabBarController, let selected = tab.selectedViewController {
             return getTopViewController(base: selected)
             
         } else if let presented = base?.presentedViewController {
+
+            if presented.view.tag == 1000 {
+                return base
+            }
+            
             return getTopViewController(base: presented)
         }
         return base
